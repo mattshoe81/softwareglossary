@@ -247,7 +247,10 @@ public final class Controller {
 
         String terms = "";
         for (String key : sortedKeys) {
-            terms += "<li><a href=\"" + key + ".html\">" + key + "</a></li>";
+            if (!key.equals("")) {
+                terms += "<li><a href=\"" + key + ".html\">" + key + "</a></li>";
+            }
+
         }
         terms += "</ul>";
         out.println(terms);
