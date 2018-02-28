@@ -95,13 +95,16 @@ public final class Controller {
         assert item[0] != null && item[1] != null : "Violation of: "
                 + "none of the elements in item are null";
         assert item != null : "Violation of: item is not null";
-        assert !item[0].equals("") && !item[1].equals(
-                "") : "Violation of: none of the elements in item are an empty string";
-                assert map != null : "Violation of: map is not null";
+        //        assert !item[0].equals("") && !item[1].equals(
+        //                "") : "Violation of: none of the elements in item are an empty string";
+        assert map != null : "Violation of: map is not null";
 
-                String term = item[0];
-                String definition = item[1];
-                map.add(term, definition);
+        if (!(item[0].equals("") && item.equals(""))) {
+            String term = item[0];
+            String definition = item[1];
+            map.add(term, definition);
+        }
+
     }
 
     /**
@@ -215,7 +218,7 @@ public final class Controller {
                 + "<link href=\"https://fonts.googleapis.com/css?family=Raleway\" "
                 + "rel=\"stylesheet\">" + "</head>"
                 + "<body> <div class=\"content\">"
-                + "<h1 class=\"title\">Cy's Glossary</h1>"
+                + "<h1 class=\"title\">CSE 2231 Glossary</h1>"
                 + "<img id=\"banner\" "
                 + "src=\"https://ianrhr.unl.edu/image/library-banner.png\" "
                 + "alt=\"Picture of Books\">" + "<nav> <ul>\r\n"
