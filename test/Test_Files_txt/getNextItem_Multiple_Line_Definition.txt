@@ -1,0 +1,11 @@
+term
+describes 
+something
+
+debugging
+a pain in 
+the butt
+
+unit testing
+very useful for maintaining 
+classes

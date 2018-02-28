@@ -1,0 +1,5 @@
+term
+describes something
+
+java
+programming language
