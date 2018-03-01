@@ -425,25 +425,18 @@ public final class Controller {
         for (String term : terms) {
             // If the term is in the definition, wrap it in <a></a> element with
             // a link to its term page
-            if (result.indexOf(term) != -1) {
-                // Use beforeStr as a template to get substrings from
-                String beforeStr = result;
+            String lowerCaseResult = result.toLowerCase();
+            String lowerCaseTerm = term.toLowerCase();
+            if (lowerCaseResult.indexOf(lowerCaseTerm) != -1) {
 
-                if (isAWordInTheString(result, term)) {
-                    String openTag = "<a href=\"" + term + ".html\">";
-                    String closingTag = "</a>";
-                    // Chop off everything after the start of the term
-                    result = result.substring(0, result.indexOf(term));
-                    // Append substring with open tag, term, then closing tag
-                    result += openTag;
-                    result += term;
-                    result += closingTag;
-                    // Use the beforeStr to get the substring containing the
-                    // rest of the definition, as the indices have changed
-                    // since adding tag
-                    result += beforeStr
-                            .substring(beforeStr.indexOf(term) + term.length());
-                }
+                String openTag = "<a href=\"" + term + ".html\">";
+                String closingTag = "</a>";
+                StringBuilder resultBuilder = new StringBuilder(result);
+                int indexStart = lowerCaseResult.indexOf(lowerCaseTerm);
+                int indexEnd = indexStart + term.length();
+                String taggedTerm = openTag + term + closingTag;
+                resultBuilder.replace(indexStart, indexEnd, taggedTerm);
+                result = resultBuilder.toString();
             }
         }
 
