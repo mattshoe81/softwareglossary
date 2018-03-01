@@ -274,9 +274,9 @@ public final class Controller {
 
     /**
      * Prints the header specific to the term pages.
-     *
      * @param term
      *            the term whose page is being updated
+     *
      * @param out
      *            output stream
      *
@@ -364,36 +364,39 @@ public final class Controller {
         String previousTerm = "index";
         int indexOfTerm = 0;
 
-        // Iterate over the terms sequence to find index of term
-        for (int k = 0; k < terms.length(); k++) {
-            if (terms.entry(k).equals(term)) {
-                indexOfTerm = k;
+        if (!term.equals("")) {
+            // Iterate over the terms sequence to find index of term
+            for (int k = 0; k < terms.length(); k++) {
+                if (terms.entry(k).equals(term)) {
+                    indexOfTerm = k;
+                }
             }
-        }
 
-        /*
-         * If the next or previous term is out of index range, set that term to
-         * index, otherwise set the next and previous to the appropriate link
-         */
-        if (terms.length() > 1) {
-            if (indexOfTerm == terms.length() - 1) {
-                nextTerm = "index";
-                previousTerm = terms.entry(indexOfTerm - 1);
-            } else if (indexOfTerm == 0) {
-                nextTerm = terms.entry(indexOfTerm + 1);
+            /*
+             * If the next or previous term is out of index range, set that term to
+             * index, otherwise set the next and previous to the appropriate link
+             */
+            if (terms.length() > 1) {
+                if (indexOfTerm == terms.length() - 1) {
+                    nextTerm = "index";
+                    previousTerm = terms.entry(indexOfTerm - 1);
+                } else if (indexOfTerm == 0) {
+                    nextTerm = terms.entry(indexOfTerm + 1);
+                } else {
+                    nextTerm = terms.entry(indexOfTerm + 1);
+                    previousTerm = terms.entry(indexOfTerm - 1);
+                }
             } else {
-                nextTerm = terms.entry(indexOfTerm + 1);
-                previousTerm = terms.entry(indexOfTerm - 1);
+                nextTerm = "index";
+                previousTerm = "index";
             }
-        } else {
-            nextTerm = "index";
-            previousTerm = "index";
+
+            out.print("<div id=\"buttonHolder\"><h3 class=\"prevButton\"><a href=\""
+                    + previousTerm + ".html\">" + "Previous</a></h3>"
+                    + "<h3 class=\"nextButton\"><a href=\"" + nextTerm + ".html\">"
+                    + "Next</a></h3></div>");
         }
 
-        out.print("<div id=\"buttonHolder\"><h3 class=\"prevButton\"><a href=\""
-                + previousTerm + ".html\">" + "Previous</a></h3>"
-                + "<h3 class=\"nextButton\"><a href=\"" + nextTerm + ".html\">"
-                + "Next</a></h3></div>");
     }
 
     /**
