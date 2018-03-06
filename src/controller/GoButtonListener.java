@@ -87,5 +87,4 @@ public class GoButtonListener implements ActionListener {
 
         inputFile.close();
     }
-
 }

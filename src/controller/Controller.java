@@ -1,11 +1,18 @@
 package controller;
 
+import java.awt.Desktop;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+
 import components.map.Map;
 import components.map.Map.Pair;
 import components.map.Map1L;
 import components.sequence.Sequence;
 import components.sequence.Sequence1L;
 import components.simplereader.SimpleReader;
+import components.simplereader.SimpleReader1L;
 import components.simplewriter.SimpleWriter;
 import components.simplewriter.SimpleWriter1L;
 import model.Model;
@@ -23,6 +30,8 @@ public final class Controller {
     }
 
     Model model;
+
+    String outputFolderName;
 
     /**
      * Reads the input file to get the next term/definition item. Item is
@@ -223,7 +232,15 @@ public final class Controller {
                 + "src=\"https://ianrhr.unl.edu/image/library-banner.png\" "
                 + "alt=\"Picture of Books\">" + "<nav> <ul>\r\n"
                 + "<li class=\"selected\"><a href=\"index.html\">Index</a></li>\r\n"
-                + "</ul> </nav>" + "<h2 id=\"indexHeader\">Index</h2>" + "<ul>";
+                + "</ul> </nav>" + "<h2 id=\"indexHeader\">Index</h2>" + "<ul>"
+                + "<p class=\"alphabeticLinks\"> <a href=\"#a\">A</a>     <a href=\"#b\">B</a>      <a href=\"#c\">C</a>\r\n" +
+                "    <a href=\"#d\">D</a>     <a href=\"#e\">E</a>      <a href=\"#f\">F</a>      <a href=\"#g\">G</a> \r\n" +
+                "    <a href=\"#h\">H</a>     <a href=\"#i\">I</a>      <a href=\"#j\">J</a>      <a href=\"#k\">K</a> \r\n" +
+                "    <a href=\"#l\">L</a>     <a href=\"#m\">M</a>      <a href=\"#n\">N</a>      <a href=\"#o\">O</a> \r\n" +
+                "    <a href=\"#p\">P</a>     <a href=\"#q\">Q</a>      <a href=\"#r\">R</a>      <a href=\"#s\">S</a> \r\n" +
+                "    <a href=\"#t\">T</a>     <a href=\"#u\">U</a>      <a href=\"#v\">V</a>      <a href=\"#w\">W</a> \r\n" +
+                "    <a href=\"#x\">X</a>     <a href=\"#y\">Y</a>      <a href=\"#z\">Z</a>";
+
         out.println(header);
     }
 
@@ -246,14 +263,27 @@ public final class Controller {
         assert sortedKeys != null : "Violation of: sortedKeys is not null";
 
         String terms = "";
+        char currentLetter = sortedKeys.entry(sortedKeys.length() - 1).charAt(0);
         for (String key : sortedKeys) {
             if (!key.equals("")) {
-                terms += "<li><a href=\"" + key + ".html\">" + key + "</a></li>";
+                char firstLetter = Character.toLowerCase(key.charAt(0));
+                if (firstLetter != currentLetter) {
+                    createLetterPage(firstLetter, key, out);
+                    terms += "<li id=\"" +firstLetter +"\" class=\"indexTerm\"><a href=\"" + key + ".html\">" + key + "</a></li>";
+                }
+                else {
+                    terms += "<li class=\"indexTerm\"><a href=\"" + key + ".html\">" + key + "</a></li>";
+                }
+                currentLetter = firstLetter;
             }
 
         }
         terms += "</ul>";
         out.println(terms);
+    }
+
+    private static void createLetterPage(char letter, String firstTerm, SimpleWriter out) {
+
     }
 
     /**
@@ -294,7 +324,7 @@ public final class Controller {
                 + "<link href=\"https://fonts.googleapis.com/css?family=Raleway\" "
                 + "rel=\"stylesheet\">" + "</head>"
                 + "<body> <div class=\"content\">"
-                + "<h1 class=\"title\">Cy's Glossary</h1>"
+                + "<h1 class=\"title\">CSE 2231 Glossary</h1>"
                 + "<img id=\"banner\" src="
                 + "\"https://ianrhr.unl.edu/image/library-banner.png\""
                 + " alt=\"Picture of Books\">" + "<nav> <ul>\r\n"
@@ -495,73 +525,115 @@ public final class Controller {
     public static void printCSSFile(String outputFolderName) {
         SimpleWriter out = new SimpleWriter1L(
                 outputFolderName + "/glossary.css");
-        out.print("body {\r\n"
-                + "    font-family:                   'Raleway', sans-seriff;\r\n"
-                + "    background:                    silver;\r\n"
-                + "    color:                         #455672; \r\n" + "}\r\n"
-                + "\r\n" + ".content {\r\n"
-                + "    background:                    #fffff0;\r\n"
-                + "    width:                         85%;\r\n"
-                + "    margin:                        auto;\r\n"
-                + "    margin-top:                    50px;\r\n"
-                + "    margin-bottom:                 75px;\r\n"
-                + "    height:                        100%;\r\n"
-                + "    border:                        4px solid gray;\r\n"
-                + "}\r\n" + "\r\n" + "#banner {\r\n"
-                + "    width:                         100%;\r\n"
-                + "    display:                       block;\r\n" + "}\r\n"
-                + "\r\n" + ".title {\r\n"
-                + "    font-weight:                   bold;\r\n"
-                + "    margin:                        auto;\r\n"
-                + "    text-align:                    center;\r\n"
-                + "    padding:                       3% 0 3% 0;\r\n"
-                + "    font-size:                     300%;\r\n" + "}\r\n"
-                + "\r\n" + "#indexHeader {\r\n"
-                + "    margin-left:                   5%;  \r\n"
-                + "    margin-bottom:                 10px;\r\n"
-                + "    font-size:                     180%;\r\n" + "}\r\n"
-                + "\r\n" + "ul {\r\n"
-                + "    margin-left:                   5%;\r\n"
-                + "    margin-top:                    0;\r\n" + "}\r\n" + "\r\n"
-                + "li {\r\n" + "    font-size:                     120%;\r\n"
-                + "}\r\n" + "\r\n" + ".term {\r\n"
-                + "    color:                         #ff0000;\r\n"
-                + "    font-style:                    italic;\r\n"
-                + "    margin-left:                   5%;\r\n"
-                + "    margin-bottom:                 10px;\r\n"
-                + "    font-weight:                   700;\r\n"
-                + "    font-size:                     250%;\r\n" + "}\r\n"
-                + "\r\n" + ".definition {\r\n"
-                + "    margin-left:                   8%;\r\n"
-                + "    font-size:                     120%;\r\n"
-                + "    margin-bottom:                 50px;\r\n" + "}\r\n"
-                + "nav {\r\n"
-                + "    background-color:               #f08656;\r\n"
-                + "    width:                          100%;\r\n" + "}\r\n"
-                + "\r\n" + "nav ul {\r\n"
-                + "    margin:                         0px;\r\n"
-                + "    list-style-type:                none;\r\n"
-                + "    padding:                        5px 0px 5px 0px;\r\n"
-                + "}\r\n" + "nav ul li {\r\n"
-                + "    display:                        inline;\r\n"
-                + "    padding:                        5px 10px 5px 10px;\r\n"
-                + "}\r\n" + "\r\n"
-                + "nav ul li a:link, nav ul li a:visited {\r\n"
-                + "    color:                          #fffff0;\r\n"
-                + "    border-bottom:                  none;\r\n"
-                + "    font-weight:                    bold;\r\n"
-                + "    text-decoration:                none;\r\n" + "}\r\n"
-                + "\r\n" + "li.selected {\r\n"
-                + "    background-color:               #d36c3f;\r\n" + "} \r\n"
-                + "\r\n" + ".prevButton {\r\n"
-                + "    margin-left:                    2%;\r\n"
-                + "    display:                        inline-block;\r\n"
-                + "}\r\n" + "\r\n" + ".nextButton {\r\n"
-                + "    float:                          right;\r\n"
-                + "    margin-right:                   2%;\r\n"
-                + "    display:                        inline-block;\r\n"
-                + "}\r\n" + "\r\n" + "a:hover {\r\n"
-                + "    font-style:                     italic;\r\n" + "}");
+
+        out.print("body {\r\n" +
+                "    font-family:                   'Raleway', sans-seriff;\r\n" +
+                "    background:                    silver;\r\n" +
+                "    color:                         #455672; \r\n" +
+                "}\r\n" +
+                "\r\n" +
+                ".alphabeticLinks {\r\n" +
+                "    text-align:                    center;\r\n" +
+                "    font-size:                     125%;\r\n" +
+                "    text-decoration:               underline;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                ".content {\r\n" +
+                "    background:                    #fffff0;\r\n" +
+                "    width:                         85%;\r\n" +
+                "    margin:                        auto;\r\n" +
+                "    margin-top:                    50px;\r\n" +
+                "    margin-bottom:                 75px;\r\n" +
+                "    height:                        100%;\r\n" +
+                "    border:                        4px solid gray;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "#banner {\r\n" +
+                "    width:                         100%;\r\n" +
+                "    display:                       block;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                ".title {\r\n" +
+                "    font-weight:                   bold;\r\n" +
+                "    margin:                        auto;\r\n" +
+                "    text-align:                    center;\r\n" +
+                "    padding:                       3% 0 3% 0;\r\n" +
+                "    font-size:                     300%;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "#indexHeader {\r\n" +
+                "    margin-left:                   5%;  \r\n" +
+                "    margin-bottom:                 10px;\r\n" +
+                "    font-size:                     180%;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "ul {\r\n" +
+                "    margin-left:                   5%;\r\n" +
+                "    margin-top:                    0;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "li {\r\n" +
+                "    font-size:                     120%;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                ".indexTerm {\r\n" +
+                "    padding-top:                   10px;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                ".term {\r\n" +
+                "    color:                         #ff0000;\r\n" +
+                "    font-style:                    italic;\r\n" +
+                "    margin-left:                   5%;\r\n" +
+                "    margin-bottom:                 10px;\r\n" +
+                "    font-weight:                   700;\r\n" +
+                "    font-size:                     250%;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                ".definition {\r\n" +
+                "    margin-left:                   8%;\r\n" +
+                "    font-size:                     120%;\r\n" +
+                "    margin-bottom:                 50px;\r\n" +
+                "}\r\n" +
+                "nav {\r\n" +
+                "    background-color:               #f08656;\r\n" +
+                "    width:                          100%;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "nav ul {\r\n" +
+                "    margin:                         0px;\r\n" +
+                "    list-style-type:                none;\r\n" +
+                "    padding:                        5px 0px 5px 0px;\r\n" +
+                "}\r\n" +
+                "nav ul li {\r\n" +
+                "    display:                        inline;\r\n" +
+                "    padding:                        5px 10px 5px 10px;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "nav ul li a:link, nav ul li a:visited {\r\n" +
+                "    color:                          #fffff0;\r\n" +
+                "    border-bottom:                  none;\r\n" +
+                "    font-weight:                    bold;\r\n" +
+                "    text-decoration:                none;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "li.selected {\r\n" +
+                "    background-color:               #d36c3f;\r\n" +
+                "} \r\n" +
+                "\r\n" +
+                ".prevButton {\r\n" +
+                "    margin-left:                    2%;\r\n" +
+                "    display:                        inline-block;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                ".nextButton {\r\n" +
+                "    float:                          right;\r\n" +
+                "    margin-right:                   2%;\r\n" +
+                "    display:                        inline-block;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "a:hover {\r\n" +
+                "    font-style:                     italic;\r\n" +
+                "}");
 
         out.close();
     }
@@ -604,5 +676,78 @@ public final class Controller {
     public void resetTextFields() {
         this.model.setFileLocationField("");
         this.model.setFolderLocation("");
+    }
+
+    /**
+     * This class gets the contents of the text fields and uses that information to
+     * read the terms file and construct the proper web pages.
+     *
+     * @author matts
+     *
+     */
+    public class GoButtonListener implements ActionListener {
+
+        public GoButtonListener(Model model) {
+            super();
+            this.model = model;
+        }
+
+        Model model;
+
+        @Override
+        public final void actionPerformed(ActionEvent arg0) {
+
+            this.model.setStatusLabel("Upload Failed");
+
+            String inputFileName = this.model.getFileLocation();
+            String outputFolderName = this.model.getFolderLocation();
+
+            // Get an input stream for the txt file containing glossary terms
+            SimpleReader inputFile = new SimpleReader1L(inputFileName);
+
+            // Read in all info from the txt file, parsing the terms and
+            // definitions into the map as {(key=term, value=definition)}
+            Map<String, String> map = new Map1L<>();
+            while (!inputFile.atEOS()) {
+                String[] item = Controller.getNextItem(inputFile);
+                Controller.addItemToMap(map, item);
+            }
+            // Sort the keys in map alphabetically into a sequence
+            Sequence<String> sortedTerms = Controller.getSortedMapKeys(map);
+
+            // Iterate over the sorted sequence, creating a new html page for
+            // each term
+            Controller.createIndexPage(outputFolderName, sortedTerms);
+            for (String term : sortedTerms) {
+                // Use the values in sortedTerms as keys to remove pairs
+                Pair<String, String> termPair = map.remove(term);
+                // Open the output stream to the file in the specified folder
+                SimpleWriter output = new SimpleWriter1L(
+                        outputFolderName + "/" + term + ".html");
+
+                Controller.printTermHeader(term, output);
+                Controller.printTermBody(termPair.key(), termPair.value(),
+                        sortedTerms, output);
+                Controller.printClosingTags(output);
+                output.close();
+            }
+
+            // Print the css file into its own .css file
+            Controller.printCSSFile(outputFolderName);
+
+            this.model.setStatusLabel("Upload Successful");
+
+            // If possible, open the browser and display the glossary
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    File file = new File(outputFolderName + "/index.html");
+                    Desktop.getDesktop().open(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            inputFile.close();
+        }
     }
 }

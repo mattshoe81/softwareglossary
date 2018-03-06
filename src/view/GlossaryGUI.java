@@ -8,7 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import controller.Controller;
 import controller.GoButtonListener;
 import controller.ResetButtonListener;
 import model.Model;
@@ -105,7 +104,6 @@ public class GlossaryGUI extends JFrame {
     public static void main(String[] args) {
 
         Model model = new Model();
-        Controller controller = new Controller(model);
         GlossaryGUI gui = new GlossaryGUI(model);
         gui.buildGUI();
 
