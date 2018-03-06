@@ -232,7 +232,7 @@ public final class Controller {
                 + "src=\"https://ianrhr.unl.edu/image/library-banner.png\" "
                 + "alt=\"Picture of Books\">" + "<nav> <ul>\r\n"
                 + "<li class=\"selected\"><a href=\"index.html\">Index</a></li>\r\n"
-                + "</ul> </nav>" + "<h2 id=\"indexHeader\">Index</h2>" + "<ul>"
+                + "</ul> </nav>" +"<ul>"
                 + "<p class=\"alphabeticLinks\"> <a href=\"#a\">A</a>     <a href=\"#b\">B</a>      <a href=\"#c\">C</a>\r\n" +
                 "    <a href=\"#d\">D</a>     <a href=\"#e\">E</a>      <a href=\"#f\">F</a>      <a href=\"#g\">G</a> \r\n" +
                 "    <a href=\"#h\">H</a>     <a href=\"#i\">I</a>      <a href=\"#j\">J</a>      <a href=\"#k\">K</a> \r\n" +
@@ -670,6 +670,24 @@ public final class Controller {
     }
 
     /**
+     * Returns a new GoButtonListener instance.
+     *
+     * @return new instance of a GoButtonListener
+     */
+    public GoButtonListener getGoButtonListener() {
+        return new GoButtonListener(this.model);
+    }
+
+    /**
+     * Returns a new ResetButtonListener instance.
+     *
+     * @return new instance of a ResetButtonListener
+     */
+    public ResetButtonListener getResetButtonListener() {
+        return new ResetButtonListener();
+    }
+
+    /**
      * Sets the contents of both the file path and folder text fields to an
      * empty string.
      */
@@ -677,6 +695,11 @@ public final class Controller {
         this.model.setFileLocationField("");
         this.model.setFolderLocation("");
     }
+
+    /* ************************************************************************
+     * ************************Button Listeners********************************
+     * ************************************************************************
+     */
 
     /**
      * This class gets the contents of the text fields and uses that information to
@@ -748,6 +771,21 @@ public final class Controller {
             }
 
             inputFile.close();
+        }
+    }
+
+    /**
+     * This class resets the text fields to the empty string.
+     *
+     * @author matts
+     *
+     */
+    public class ResetButtonListener implements ActionListener {
+
+        @Override
+        public final void actionPerformed(ActionEvent arg0) {
+            Controller.this.resetTextFields();
+            Controller.this.updateStatus("Ready");
         }
     }
 }

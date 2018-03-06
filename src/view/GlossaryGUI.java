@@ -8,8 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import controller.GoButtonListener;
-import controller.ResetButtonListener;
+import controller.Controller;
 import model.Model;
 
 /**
@@ -28,12 +27,14 @@ public class GlossaryGUI extends JFrame {
     /**
      * Default Constructor.
      */
-    public GlossaryGUI(Model model) {
+    public GlossaryGUI(Model model, Controller controller) {
         super();
         this.model = model;
+        this.controller = controller;
     }
 
     private Model model;
+    private Controller controller;
 
     /**
      * construc the GUI.
@@ -76,12 +77,12 @@ public class GlossaryGUI extends JFrame {
 
         // Create the reset button
         JButton resetButton = new JButton("Reset");
-        resetButton.addActionListener(new ResetButtonListener());
+        resetButton.addActionListener(this.controller.getResetButtonListener());
         buttonPanel.add(resetButton);
 
         //Create the button to run the program
         JButton goButton = new JButton("Go");
-        goButton.addActionListener(new GoButtonListener(this.model));
+        goButton.addActionListener(this.controller.getGoButtonListener());
         buttonPanel.add(goButton);
 
         // Add Text area panel and go button to the background panel
@@ -104,7 +105,8 @@ public class GlossaryGUI extends JFrame {
     public static void main(String[] args) {
 
         Model model = new Model();
-        GlossaryGUI gui = new GlossaryGUI(model);
+        Controller controller = new Controller(model);
+        GlossaryGUI gui = new GlossaryGUI(model, controller);
         gui.buildGUI();
 
     }
