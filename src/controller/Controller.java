@@ -221,25 +221,11 @@ public final class Controller {
     public static void printIndexHeader(SimpleWriter out) {
         assert out.isOpen() : "Violation of: out.isOpen = true";
 
-        String header = "<!doctype html>" + "<head>"
-                + "<title>CSE 2231 Glossary</title>"
-                + "<link type=\"text/css\" rel=\"stylesheet\" href=\"glossary.css\">"
-                + "<link href=\"https://fonts.googleapis.com/css?family=Raleway\" "
-                + "rel=\"stylesheet\">" + "</head>"
-                + "<body> <div class=\"content\">"
-                + "<h1 class=\"title\">CSE 2231 Glossary</h1>"
-                + "<img id=\"banner\" "
-                + "src=\"https://ianrhr.unl.edu/image/library-banner.png\" "
-                + "alt=\"Picture of Books\">" + "<nav> <ul>\r\n"
-                + "<li class=\"selected\"><a href=\"index.html\">Index</a></li>\r\n"
-                + "</ul> </nav>" +"<ul>"
-                + "<p class=\"alphabeticLinks\"> <a href=\"#a\">A</a>     <a href=\"#b\">B</a>      <a href=\"#c\">C</a>\r\n" +
-                "    <a href=\"#d\">D</a>     <a href=\"#e\">E</a>      <a href=\"#f\">F</a>      <a href=\"#g\">G</a> \r\n" +
-                "    <a href=\"#h\">H</a>     <a href=\"#i\">I</a>      <a href=\"#j\">J</a>      <a href=\"#k\">K</a> \r\n" +
-                "    <a href=\"#l\">L</a>     <a href=\"#m\">M</a>      <a href=\"#n\">N</a>      <a href=\"#o\">O</a> \r\n" +
-                "    <a href=\"#p\">P</a>     <a href=\"#q\">Q</a>      <a href=\"#r\">R</a>      <a href=\"#s\">S</a> \r\n" +
-                "    <a href=\"#t\">T</a>     <a href=\"#u\">U</a>      <a href=\"#v\">V</a>      <a href=\"#w\">W</a> \r\n" +
-                "    <a href=\"#x\">X</a>     <a href=\"#y\">Y</a>      <a href=\"#z\">Z</a>";
+        SimpleReader in = new SimpleReader1L("data/indexHeader.html");
+        String header = "";
+        while (!in.atEOS()) {
+            header += in.nextLine();
+        }
 
         out.println(header);
     }
@@ -324,18 +310,17 @@ public final class Controller {
 
         // Use this header for each term page, as it imports the stylesheets
         // necessary and all term pages share a common theme
-        String header = "<!doctype html>" + "<head>" + "<title>" + term
-                + "</title>"
-                + "<link type=\"text/css\" rel=\"stylesheet\" href=\"glossary.css\">"
-                + "<link href=\"https://fonts.googleapis.com/css?family=Raleway\" "
-                + "rel=\"stylesheet\">" + "</head>"
-                + "<body> <div class=\"content\">"
-                + "<h1 class=\"title\">CSE 2231 Glossary</h1>"
-                + "<img id=\"banner\" src="
-                + "\"https://ianrhr.unl.edu/image/library-banner.png\""
-                + " alt=\"Picture of Books\">" + "<nav> <ul>\r\n"
-                + "<li class=\"selected\"><a href=\"index.html\">Index</a></li>\r\n"
-                + "</ul> </nav>";
+        String header = "";
+        SimpleReader in = new SimpleReader1L("data/termHeader.html");
+        while (!in.atEOS()) {
+            String line = in.nextLine();
+            if (line.equals("*TERM*")) {
+                header += term;
+            }
+            else {
+                header += line;
+            }
+        }
         out.println(header);
     }
 

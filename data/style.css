@@ -10,8 +10,10 @@ body {
 
 .alphabeticLinks {
 	text-align:                    center;
-	font-size:                     125%;
+	font-size:                     150%;
 	text-decoration:               underline;
+	margin:                        15px 0px 10px 0px;
+	padding:                       0px 0px 0px 0px;
 }
 
 .content {
