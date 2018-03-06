@@ -264,7 +264,13 @@ public final class Controller {
 
         String terms = "";
         char currentLetter = sortedKeys.entry(sortedKeys.length() - 1).charAt(0);
+        int counter = 0;
+        int numberOfKeys = sortedKeys.length();
+        terms += "<table id=\"termTable\" width=\"100%\"> <tr> <td width=\"50%\">";
         for (String key : sortedKeys) {
+            if (counter == numberOfKeys / 2 + 1) {
+                terms += "</ul> </td> <td width=\"50%\"> ";
+            }
             if (!key.equals("")) {
                 char firstLetter = Character.toLowerCase(key.charAt(0));
                 if (firstLetter != currentLetter) {
@@ -276,9 +282,9 @@ public final class Controller {
                 }
                 currentLetter = firstLetter;
             }
-
+            counter++;
         }
-        terms += "</ul>";
+        terms += "</td> </tr> </ul> <table>";
         out.println(terms);
     }
 
@@ -525,115 +531,12 @@ public final class Controller {
     public static void printCSSFile(String outputFolderName) {
         SimpleWriter out = new SimpleWriter1L(
                 outputFolderName + "/glossary.css");
-
-        out.print("body {\r\n" +
-                "    font-family:                   'Raleway', sans-seriff;\r\n" +
-                "    background:                    silver;\r\n" +
-                "    color:                         #455672; \r\n" +
-                "}\r\n" +
-                "\r\n" +
-                ".alphabeticLinks {\r\n" +
-                "    text-align:                    center;\r\n" +
-                "    font-size:                     125%;\r\n" +
-                "    text-decoration:               underline;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                ".content {\r\n" +
-                "    background:                    #fffff0;\r\n" +
-                "    width:                         85%;\r\n" +
-                "    margin:                        auto;\r\n" +
-                "    margin-top:                    50px;\r\n" +
-                "    margin-bottom:                 75px;\r\n" +
-                "    height:                        100%;\r\n" +
-                "    border:                        4px solid gray;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "#banner {\r\n" +
-                "    width:                         100%;\r\n" +
-                "    display:                       block;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                ".title {\r\n" +
-                "    font-weight:                   bold;\r\n" +
-                "    margin:                        auto;\r\n" +
-                "    text-align:                    center;\r\n" +
-                "    padding:                       3% 0 3% 0;\r\n" +
-                "    font-size:                     300%;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "#indexHeader {\r\n" +
-                "    margin-left:                   5%;  \r\n" +
-                "    margin-bottom:                 10px;\r\n" +
-                "    font-size:                     180%;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "ul {\r\n" +
-                "    margin-left:                   5%;\r\n" +
-                "    margin-top:                    0;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "li {\r\n" +
-                "    font-size:                     120%;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                ".indexTerm {\r\n" +
-                "    padding-top:                   10px;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                ".term {\r\n" +
-                "    color:                         #ff0000;\r\n" +
-                "    font-style:                    italic;\r\n" +
-                "    margin-left:                   5%;\r\n" +
-                "    margin-bottom:                 10px;\r\n" +
-                "    font-weight:                   700;\r\n" +
-                "    font-size:                     250%;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                ".definition {\r\n" +
-                "    margin-left:                   8%;\r\n" +
-                "    font-size:                     120%;\r\n" +
-                "    margin-bottom:                 50px;\r\n" +
-                "}\r\n" +
-                "nav {\r\n" +
-                "    background-color:               #f08656;\r\n" +
-                "    width:                          100%;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "nav ul {\r\n" +
-                "    margin:                         0px;\r\n" +
-                "    list-style-type:                none;\r\n" +
-                "    padding:                        5px 0px 5px 0px;\r\n" +
-                "}\r\n" +
-                "nav ul li {\r\n" +
-                "    display:                        inline;\r\n" +
-                "    padding:                        5px 10px 5px 10px;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "nav ul li a:link, nav ul li a:visited {\r\n" +
-                "    color:                          #fffff0;\r\n" +
-                "    border-bottom:                  none;\r\n" +
-                "    font-weight:                    bold;\r\n" +
-                "    text-decoration:                none;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "li.selected {\r\n" +
-                "    background-color:               #d36c3f;\r\n" +
-                "} \r\n" +
-                "\r\n" +
-                ".prevButton {\r\n" +
-                "    margin-left:                    2%;\r\n" +
-                "    display:                        inline-block;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                ".nextButton {\r\n" +
-                "    float:                          right;\r\n" +
-                "    margin-right:                   2%;\r\n" +
-                "    display:                        inline-block;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "a:hover {\r\n" +
-                "    font-style:                     italic;\r\n" +
-                "}");
+        SimpleReader in = new SimpleReader1L("data/style.css");
+        String cssStyling = "";
+        while (!in.atEOS()) {
+            cssStyling += in.nextLine();
+        }
+        out.print(cssStyling);
 
         out.close();
     }
