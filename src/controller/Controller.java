@@ -205,7 +205,7 @@ public final class Controller {
         SimpleWriter out = new SimpleWriter1L(outputFolderName + "/index.html");
         printIndexHeader(out);
         printIndexBody(terms, out);
-        printClosingTags(out);
+        printFooter(out);
     }
 
     /**
@@ -226,7 +226,7 @@ public final class Controller {
         while (!in.atEOS()) {
             header += in.nextLine();
         }
-
+        in.close();
         out.println(header);
     }
 
@@ -249,10 +249,13 @@ public final class Controller {
         assert sortedKeys != null : "Violation of: sortedKeys is not null";
 
         String terms = "";
+        SimpleReader in = new SimpleReader1L("data/indexTerm.html");
         char currentLetter = sortedKeys.entry(sortedKeys.length() - 1).charAt(0);
         int counter = 0;
         int numberOfKeys = sortedKeys.length();
-        terms += "<table id=\"termTable\" width=\"100%\"> <tr> <td width=\"50%\">";
+        terms += "            <table id=\"termTable\" width=\"100%\">\r\n" +
+                "                <tr> \r\n" +
+                "                    <td width=\"50%\">";
         for (String key : sortedKeys) {
             if (counter == numberOfKeys / 2 + 1) {
                 terms += "</ul> </td> <td width=\"50%\"> ";
@@ -279,7 +282,7 @@ public final class Controller {
     }
 
     /**
-     * Prints closing tags to the output stream.
+     * Prints the footer and the closing tags to the output stream.
      *
      * @param out
      *            output stream
@@ -287,10 +290,14 @@ public final class Controller {
      * @updates out.content
      * @requires out.isOpen = true
      */
-    public static void printClosingTags(SimpleWriter out) {
+    public static void printFooter(SimpleWriter out) {
         assert out.isOpen() : "Violation of: out.isOpen = true";
-
-        String closingTags = "</div> </body> </html>";
+        SimpleReader in = new SimpleReader1L("data/footer.html");
+        String closingTags = "";
+        while (!in.atEOS()) {
+            closingTags += in.nextLine();
+        }
+        in.close();
         out.println(closingTags);
     }
 
@@ -321,6 +328,7 @@ public final class Controller {
                 header += line;
             }
         }
+        in.close();
         out.println(header);
     }
 
@@ -639,7 +647,7 @@ public final class Controller {
                 Controller.printTermHeader(term, output);
                 Controller.printTermBody(termPair.key(), termPair.value(),
                         sortedTerms, output);
-                Controller.printClosingTags(output);
+                Controller.printFooter(output);
                 output.close();
             }
 
