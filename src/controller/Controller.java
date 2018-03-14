@@ -222,12 +222,10 @@ public final class Controller {
         assert out.isOpen() : "Violation of: out.isOpen = true";
 
         SimpleReader in = new SimpleReader1L("data/indexHeader.html");
-        String header = "";
         while (!in.atEOS()) {
-            header += in.nextLine();
+            out.println(in.nextLine());
         }
         in.close();
-        out.println(header);
     }
 
     /**
@@ -248,33 +246,40 @@ public final class Controller {
         assert out.isOpen() : "Violation of: out.isOpen = true";
         assert sortedKeys != null : "Violation of: sortedKeys is not null";
 
-        String terms = "";
         SimpleReader in = new SimpleReader1L("data/indexTerm.html");
         char currentLetter = sortedKeys.entry(sortedKeys.length() - 1).charAt(0);
         int counter = 0;
         int numberOfKeys = sortedKeys.length();
-        terms += "            <table id=\"termTable\" width=\"100%\">\r\n" +
-                "                <tr> \r\n" +
-                "                    <td width=\"50%\">";
+        out.println("            <table id=\"termTable\" width=\"100%\">") ;
+        out.println("                <tr>");
+        out.println("                    <td width=\"50%\">");
+        out.println("                        <ul>");
         for (String key : sortedKeys) {
             if (counter == numberOfKeys / 2 + 1) {
-                terms += "</ul> </td> <td width=\"50%\"> ";
+                out.println("                        </ul>");
+                out.println("                    </td>");
+                out.println("                    <td width=\"50%\">");
+                out.println("                        <ul> ");
             }
             if (!key.equals("")) {
                 char firstLetter = Character.toLowerCase(key.charAt(0));
                 if (firstLetter != currentLetter) {
                     createLetterPage(firstLetter, key, out);
-                    terms += "<li id=\"" +firstLetter +"\" class=\"indexTerm\"><a href=\"" + key + ".html\">" + key + "</a></li>";
+                    out.println("                            <li id=\"" +firstLetter +"\" class=\"indexTerm\"><a href=\"" + key + ".html\">" + key + "</a></li>");
                 }
                 else {
-                    terms += "<li class=\"indexTerm\"><a href=\"" + key + ".html\">" + key + "</a></li>";
+                    out.println("                            <li class=\"indexTerm\"><a href=\"" + key + ".html\">" + key + "</a></li>");
                 }
                 currentLetter = firstLetter;
             }
             counter++;
         }
-        terms += "</td> </tr> </ul> <table>";
-        out.println(terms);
+
+        out.println("                        </ul>");
+        out.println("                    </td>");
+        out.println("                </tr>");
+        out.println("            <table>");
+        in.close();
     }
 
     private static void createLetterPage(char letter, String firstTerm, SimpleWriter out) {
@@ -293,12 +298,10 @@ public final class Controller {
     public static void printFooter(SimpleWriter out) {
         assert out.isOpen() : "Violation of: out.isOpen = true";
         SimpleReader in = new SimpleReader1L("data/footer.html");
-        String closingTags = "";
         while (!in.atEOS()) {
-            closingTags += in.nextLine();
+            out.println(in.nextLine());
         }
         in.close();
-        out.println(closingTags);
     }
 
     /**
@@ -321,11 +324,13 @@ public final class Controller {
         SimpleReader in = new SimpleReader1L("data/termHeader.html");
         while (!in.atEOS()) {
             String line = in.nextLine();
-            if (line.equals("*TERM*")) {
-                header += term;
+            if (line.equals("        <title>")) {
+                out.print(line);
+                out.print(term);
+                out.println(in.nextLine());
             }
             else {
-                header += line;
+                out.println(line);
             }
         }
         in.close();
@@ -360,11 +365,9 @@ public final class Controller {
         // Insert the links into the definition before adding it to the body
         String definitionWithLinks = insertLinksIntoDefinition(definition,
                 terms);
-        String body = "<h1 class=\"term\">" + term + "</h1>"
-                + "<p class=\"definition\">" + definitionWithLinks + "</p>"
-                + "<p></p>";
-
-        out.println(body);
+        out.println("            <h1 class=\"term\">" + term + "</h1>");
+        out.println("                <p class=\"definition\">" + definitionWithLinks + "</p>");
+        out.println("                <p></p>");
         printNextAndPreviousButtons(term, terms, out);
     }
 
@@ -525,12 +528,10 @@ public final class Controller {
         SimpleWriter out = new SimpleWriter1L(
                 outputFolderName + "/glossary.css");
         SimpleReader in = new SimpleReader1L("data/style.css");
-        String cssStyling = "";
         while (!in.atEOS()) {
-            cssStyling += in.nextLine();
+            out.println(in.nextLine());
         }
-        out.print(cssStyling);
-
+        in.close();
         out.close();
     }
 
